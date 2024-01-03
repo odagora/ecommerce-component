@@ -2,15 +2,21 @@ import { htmlToElement } from "./utils/htmlToElement.js";
 import { product } from "./components/product.js";
 import { menuItems } from "./data/data.js";
 
+
 function init() {
-  const menuContainer = document.querySelector(".menu");
-  const result = [];
+  renderProducts();
+
+}
+
+function renderProducts() {
+  const menuContainer = document.querySelector('.menu');
+  const products = [];
 
   menuItems.forEach((item) => {
-    result.push(htmlToElement(product({...item})));
+    products.push(htmlToElement(product({...item})));
   })
 
-  menuContainer.append(...result);
+  menuContainer.append(...products);
 }
 
 init();
