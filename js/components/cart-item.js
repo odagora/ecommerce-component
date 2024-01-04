@@ -1,6 +1,6 @@
 import { formattedPrice } from "../utils/formattedPrice.js"
 
-export function cartItem({image, altText, name, price, subTotal}) {
+export function cartItem({image, altText, name, price, subTotal, quantity}) {
   const newPrice = formattedPrice(price * 100)
   const newSubTotal = formattedPrice(subTotal)
 
@@ -8,7 +8,7 @@ export function cartItem({image, altText, name, price, subTotal}) {
     <li>
       <div class="plate">
         <img src="${image}" alt="${altText}" class="plate" />
-        <div class="quantity">1</div>
+        <div class="quantity">${quantity}</div>
       </div>
       <div class="content">
         <p class="menu-item">${name}</p>
@@ -18,7 +18,7 @@ export function cartItem({image, altText, name, price, subTotal}) {
         <button class="decrease">
           <img src="images/chevron.svg" />
         </button>
-        <div class="quantity">1</div>
+        <div class="quantity">${quantity}</div>
         <button class="increase">
           <img src="images/chevron.svg" />
         </button>
