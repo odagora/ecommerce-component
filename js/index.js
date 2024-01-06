@@ -13,7 +13,8 @@ let quantity = 1;
 
 function init() {
   renderProducts();
-  checkCartState();
+  isCartEmpty();
+  updateCartTotals();
 }
 
 function renderProducts() {
@@ -23,6 +24,7 @@ function renderProducts() {
 
 function addProductToCart(productInfo) {
   cartContainer.appendChild(htmlToElement(cartItem(productInfo)));
+  updateCartTotals();
 }
 
 function updateProductCTA(parent, oldNode) {
@@ -48,13 +50,27 @@ function updateProductTotalPrice(node, price, quantity) {
   node.innerText = formattedPrice(updateProductPrice(price, quantity));
 }
 
-function checkCartState() {
-  const cartItems = cartContainer.querySelectorAll('li');
-  emptyMessage.hidden = !isCartEmpty(cartItems);
+function updateCartTotals() {
+  let [ subTotal, tax, total ] = [0, 0, 0]
+  const {subTotalElement, taxElement, totalElement} = getCartValues()
+
+  if(!isCartEmpty()) {
+    const subTotals = cartContainer.querySelectorAll('li .subtotal')
+    const productsSubTotals = Array.from(subTotals).map(product => parseInt(product.innerHTML.split('$')[1] * 100))
+
+    subTotal = productsSubTotals.reduce((result, value) => result + value)
+    tax = subTotal * 0.0975
+    total = subTotal + tax
+  }
+
+  subTotalElement.innerText = formattedPrice(subTotal)
+  taxElement.innerText = formattedPrice(tax)
+  totalElement.innerText = formattedPrice(total)
 }
 
-function isCartEmpty(items) {
-  return !items.length;
+function isCartEmpty() {
+  const cartItems = cartContainer.querySelectorAll('li');
+  return !cartItems.length
 }
 
 productList.addEventListener('click', (event) => {
@@ -64,7 +80,7 @@ productList.addEventListener('click', (event) => {
 
     addProductToCart({ ...productInfo, subTotal, quantity });
     updateProductCTA(event.target.parentElement, event.target);
-    checkCartState();
+    if (!isCartEmpty()) emptyMessage.hidden = true;
   }
 });
 
@@ -76,9 +92,11 @@ cartList.addEventListener('click', (event) => {
 
   if (parent.classList.contains('increase') || element.classList.contains('increase')) {
     quantity++;
+    setTimeout(() => updateCartTotals(), 0)
   } else if (parent.classList.contains('decrease') || element.classList.contains('decrease')) {
     if (quantity > 0) {
       quantity--;
+      setTimeout(() => updateCartTotals(), 0)
     }
   }
 
@@ -113,6 +131,18 @@ function getProductInCartInfo(event) {
     productQuantity,
     productSubTotalContainer,
     productPrice
+  }
+}
+
+function getCartValues() {
+  const subTotalElement = document.querySelector('.totals .subtotal')
+  const taxElement = document.querySelector('.tax')
+  const totalElement = document.querySelectorAll('.total')[1]
+
+  return {
+    subTotalElement,
+    taxElement,
+    totalElement
   }
 }
 
