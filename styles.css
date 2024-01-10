@@ -154,7 +154,8 @@ button.in-cart {
 .cart-summary li {
   display: grid;
   grid-template-areas: "plate content content"
-    "plate quantity price";
+    "plate quantity price"
+    "plate quantity cta";
 }
 
 .cart-summary .menu-item {
@@ -211,6 +212,7 @@ button.in-cart {
 .quantity__wrapper {
   display: flex;
   gap: 10px;
+  margin-bottom: 16px;
 }
 
 .quantity__wrapper .quantity {
@@ -257,6 +259,11 @@ button.in-cart {
 
 .cart-summary li .subtotal {
   text-align: right;
+}
+
+.cart-summary li .remove {
+  display: none;
+  grid-area: cta;
 }
 
 .totals {

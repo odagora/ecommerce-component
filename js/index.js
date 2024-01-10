@@ -3,6 +3,7 @@ import { product } from "./components/product.js";
 import { cartItem } from "./components/cart-item.js";
 import { menuItems } from "./data/data.js";
 import { formattedPrice } from "./utils/formattedPrice.js";
+import { replaceChild } from "./utils/replaceChild.js";
 
 const menuContainer = document.querySelector('.menu');
 const cartContainer = document.querySelector('.cart-summary');
@@ -15,6 +16,16 @@ function init() {
   renderProducts();
   isCartEmpty();
   updateCartTotals();
+}
+
+function resetProduct(productName) {
+  const productNames = productList.querySelectorAll('.menu-item')
+  const match = Array.from(productNames).find(product => product.innerText === productName)
+  const productToReset = match.closest('li')
+  const props = getProductInfo({product: productToReset});
+  const newNode = htmlToElement(product({ ...props }));
+
+  replaceChild(menuContainer, productToReset, newNode);
 }
 
 function renderProducts() {
@@ -34,8 +45,7 @@ function updateProductCTA(parent, oldNode) {
       In Cart
     </button>
   `;
-  const newNode = htmlToElement(newElement);
-  parent.replaceChild(newNode, oldNode);
+  replaceChild(parent, oldNode, newElement);
 }
 
 function updateProductQuantity(nodes, quantity) {
@@ -75,7 +85,7 @@ function isCartEmpty() {
 
 productList.addEventListener('click', (event) => {
   if (event.target.classList.contains('add')) {
-    const productInfo = getProductInfo(event);
+    const productInfo = getProductInfo({event});
     const subTotal = updateProductPrice(productInfo.price * 100, 1);
 
     addProductToCart({ ...productInfo, subTotal, quantity });
@@ -87,16 +97,28 @@ productList.addEventListener('click', (event) => {
 const cartList = document.querySelector('.cart');
 
 cartList.addEventListener('click', (event) => {
-  const { element, parent, productQuantity, productSubTotalContainer, productPrice } = getProductInCartInfo(event)
+  const { element, parent, productQuantity, productSubTotalContainer, productPrice, productRemoveButton } = getProductInCartInfo(event)
   let quantity = parseInt(productQuantity[0].innerText);
 
   if (parent.classList.contains('increase') || element.classList.contains('increase')) {
     quantity++;
     setTimeout(() => updateCartTotals(), 0)
+    productRemoveButton.style.display = "none"
   } else if (parent.classList.contains('decrease') || element.classList.contains('decrease')) {
     if (quantity > 0) {
       quantity--;
       setTimeout(() => updateCartTotals(), 0)
+    }
+    if (quantity === 0) {
+      productRemoveButton.style.display = "block"
+
+      productRemoveButton.addEventListener('click', (event) => {
+        const { product, productName } = getProductInCartInfo(event);
+        event.stopPropagation();
+        product.remove();
+        resetProduct(productName);
+        if (isCartEmpty()) emptyMessage.hidden = false;
+      })
     }
   }
 
@@ -104,13 +126,25 @@ cartList.addEventListener('click', (event) => {
   updateProductTotalPrice(productSubTotalContainer, productPrice, quantity);
 });
 
-function getProductInfo(event) {
-  const imageContainer = event.target.parentElement.previousElementSibling;
-  const infoContainer = event.target.parentElement;
-  const image = new URL(imageContainer.querySelector('img').src).pathname;
-  const altText = imageContainer.querySelector('img').alt;
-  const name = infoContainer.querySelector('.menu-item').innerText;
-  const price = infoContainer.querySelector('.price').innerText.slice(1);
+function getProductInfo({ product, event }) {
+  let image, altText, name, price;
+
+  if (event) {
+    const imageContainer = event.target.parentElement.previousElementSibling;
+    const infoContainer = event.target.parentElement;
+    image = new URL(imageContainer.querySelector('img').src).pathname;
+    altText = imageContainer.querySelector('img').alt;
+    name = infoContainer.querySelector('.menu-item').innerText;
+    price = infoContainer.querySelector('.price').innerText.slice(1);
+  }
+
+  if (product) {
+    const imagePathName = new URL(product.querySelector('img').src).pathname;
+    image = imagePathName.split('/').pop();
+    altText = product.querySelector('img').alt;
+    name = product.querySelector('.menu-item').innerText;
+    price = Number(product.querySelector('.price').innerText.slice(1)) * 100;
+  }
 
   return { image, altText, name, price };
 }
@@ -118,19 +152,33 @@ function getProductInfo(event) {
 function getProductInCartInfo(event) {
   const element = event.target;
   const product = element.closest('li');
-  const quantityWrapper = element.closest('.quantity__wrapper');
+  const productName = product.querySelector('.menu-item').innerText;
   const productQuantity = product.querySelectorAll('.quantity');
-  const productContent = quantityWrapper.previousElementSibling;
-  const productPriceContainer = productContent.querySelector('.price');
-  const productSubTotalContainer = quantityWrapper.nextElementSibling;
-  const productPrice = parseInt(productPriceContainer.innerText.split('$')[1] * 100);
+  const quantityWrapper = element.closest('.quantity__wrapper');
+
+  if (quantityWrapper) {
+    const productContent = quantityWrapper.previousElementSibling;
+    const productPriceContainer = productContent.querySelector('.price');
+    const productSubTotalContainer = quantityWrapper.nextElementSibling;
+    const productRemoveButton = productSubTotalContainer.nextElementSibling;
+    const productPrice = parseInt(productPriceContainer.innerText.split('$')[1] * 100);
+
+    return {
+      element,
+      parent: element.parentElement,
+      product,
+      productQuantity,
+      productSubTotalContainer,
+      productPrice,
+      productRemoveButton
+    }
+  }
 
   return {
     element,
     parent: element.parentElement,
-    productQuantity,
-    productSubTotalContainer,
-    productPrice
+    product,
+    productName
   }
 }
 

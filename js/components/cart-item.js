@@ -24,6 +24,7 @@ export function cartItem({image, altText, name, price, subTotal, quantity}) {
         </button>
       </div>
       <div class="subtotal">${newSubTotal}</div>
+      <button class="remove">Remove</button>
     </li>
   `
 }
