@@ -53,19 +53,19 @@ ul.menu li {
   margin-bottom: 45px;
 }
 
-ul.menu li:nth-child(4n + 1):before {
+ul.menu product-item:nth-child(4n + 1) li:before {
   --background: #e1f1fe
 }
 
-ul.menu li:nth-child(4n + 2):before {
+ul.menu product-item:nth-child(4n + 2) li:before {
   --background: #ffe2f0
 }
 
-ul.menu li:nth-child(4n + 3):before {
+ul.menu product-item:nth-child(4n + 3) li:before {
   --background: #f7f7fe
 }
 
-ul.menu li:nth-child(4n + 4):before {
+ul.menu product-item:nth-child(4n + 4) li:before {
   --background: #defef0
 }
 
