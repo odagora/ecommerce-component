@@ -1,3 +1,4 @@
+import { ProductEvents } from "../events/productEvents.js";
 import { numberToPrice } from "../utils/format.js"
 
 export class ProductItem extends HTMLElement {
@@ -12,17 +13,24 @@ export class ProductItem extends HTMLElement {
   connectedCallback() {
     this.render()
     this.querySelector('button').addEventListener('click', () => {
-      const event = new CustomEvent('add-to-cart', {
-        detail: {
-          name: this.name,
-          price: this.price,
-          image: this.image,
-          alt: this.alt,
-          quantity: 1
-        }
-      })
-      document.dispatchEvent(event)
+      this.#addToCartEvent();
     })
+  }
+
+  disconnectedCallback() {
+    this.querySelector('button').removeEventListener('click', () => {
+      this.#addToCartEvent();
+    })
+  }
+
+  #addToCartEvent() {
+    document.dispatchEvent(ProductEvents.addToCart({
+      name: this.name,
+      price: this.price,
+      image: this.image,
+      alt: this.alt,
+      quantity: 1
+    }))
   }
 
   update() {

@@ -1,3 +1,4 @@
+import { CartEvents } from "../events/cartEvents.js";
 import { numberToPrice } from "../utils/format.js"
 
 export class CartItem extends HTMLElement {
@@ -14,33 +15,45 @@ export class CartItem extends HTMLElement {
   connectedCallback() {
     this.render();
     this.querySelector('.remove').addEventListener('click', () => {
-      const event = new CustomEvent('remove-from-cart', {
-        detail: {
-          name: this.name
-        }
-      })
-      document.dispatchEvent(event)
+      this.#removeFromCartEvent();
     })
     this.querySelector('.decrease').addEventListener('click', () => {
-      const event = new CustomEvent('decrease-quantity', {
-        detail: {
-          name: this.name,
-          quantity: this.quantity,
-          price: this.price
-        }
-      })
-      document.dispatchEvent(event)
+      this.#quantityChangeEvent('decrease-quantity');
     })
     this.querySelector('.increase').addEventListener('click', () => {
-      const event = new CustomEvent('increase-quantity', {
-        detail: {
-          name: this.name,
-          quantity: this.quantity,
-          price: this.price
-        }
-      })
-      document.dispatchEvent(event)
+      this.#quantityChangeEvent('increase-quantity');
     })
+  }
+
+  disconnectedCallback() {
+    this.querySelector('.remove').removeEventListener('click', () => {
+      this.#removeFromCartEvent();
+    })
+    this.querySelector('.decrease').removeEventListener('click', () => {
+      this.#quantityChangeEvent('decrease-quantity');
+    })
+    this.querySelector('.increase').removeEventListener('click', () => {
+      this.#quantityChangeEvent('increase-quantity');
+    })
+  }
+
+  #removeFromCartEvent() {
+    document.dispatchEvent(CartEvents.removeFromCart(this.name))
+  }
+
+  #quantityChangeEvent(event) {
+    const productDetails = {
+      name: this.name,
+      quantity: this.quantity,
+      price: this.price
+    }
+    if (event === 'decrease-quantity') {
+      document.dispatchEvent(CartEvents.decreaseQuantity(productDetails))
+    }
+
+    if(event === 'increase-quantity') {
+      document.dispatchEvent(CartEvents.increaseQuantity(productDetails))
+    }
   }
 
   updateCTA() {

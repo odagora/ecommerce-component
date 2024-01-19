@@ -10,7 +10,7 @@ export class Menu {
     menuContainer.innerHTML = '';
 
     this.products.forEach((product) => {
-      const productItem = new ProductItem({...product});
+      const productItem = new ProductItem({ ...product });
       menuContainer.appendChild(productItem);
     })
   }
