@@ -1,8 +1,17 @@
-# Brief
+# AdventofJS - Ecommerce component
+This is a solution to the Avent of JS ecommerce component challenge.
 
+
+## Table of contents
+- [Overview](#Overview)
+- [Screenshots](#Screenshots)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+- [Author](#author)
+
+## Overview
 In this project, we're creating an eCommerce component.
-
-You can use as many (or as few) tools, libraries, and frameworks as you'd like. If you're trying to learn something new, this would be a great way to push yourself.
 
 **Users should be able to:**
 
@@ -14,29 +23,192 @@ You can use as many (or as few) tools, libraries, and frameworks as you'd like. 
   - If the quantity goes down to 0, the user will have the option to delete or remove the product for their cart entirely.
 - Tax is based on the state of Tennessee sales tax: `0.0975`
 
-**Need some support on this challenge?** Join the [Learn Build Teach](http://learnbuildteach.com) Discord community. We have a separate channel set up specifically for the Advent of JavaScript.
+## Screenshots
+### Initial state
+![Initial state](https://bit.ly/3U7U7Um)
 
-# Getting Started
+### One product in cart
+![One product in cart](https://bit.ly/47N2sjg)
 
-1. To get started, download the zip file. This includes all the project assets you need to get started: HTML, CSS, images, and fonts.
-2. Take a look around. Look at the project's Figma file. This is a great way to see how the pieces and parts should look within the browser.
-3. Open the project's `README.md` file. It has additional information on how the project is structured.
-4. Customize your project/file architecture to your liking.
-5. Happy coding!
-6. Once you're finished, share your work using **#adventofjs**
+### Two products in cart
+![Two products in cart](https://bit.ly/3O6AiZF)
 
-# Taking your Project to the Next Level
+### Change product quantity
+![Change product quantity](https://bit.ly/48LIPcU)
 
-- Use a framework like [React](https://reactjs.org/), [Vue](https://vuejs.org/), or [Svelte](https://svelte.dev/). Or, if you're feeling particularly adventurous, try writing everything in Vanilla JavaScript.
-- Try adding animations and transitions when an item is added, updated, or removed from your cart.
-- Take a step back and try writing the HTML and CSS for this project yourself. Start with the provided Figma file. If you get stuck, you can always purchase the [Advent of CSS](http://adventofcss.com) solutions, where Amy explains how to build this.
+### Remove product from cart
+![Remove product from cart](https://bit.ly/3tZC6wy)
 
-# FAQs
+## My process
+### Built with
+- Vanilla JavaScript
+- OOP
+- Web components
+- Custom events
 
-- Can I use libraries / frameworks on these projects?
-  - Of course! We're providing the vanilla HTML and CSS, but you can use whatever tools and frameworks you'd like.
-- Oh no! I'm stuck!
-  - [[FREE]] Consider upgrading to the [Solutions tier](http://adventofjs.com). You'll get access to a video, where James explains how to write all the code.
-  - [[SOLUTION]] Check out the [Learn Build Teach Discord.](http://learnbuildteach.com) We have a specific channel set up, just for the Advent of JavaScript.
-- Can I use this project in my portfolio?
-  - Sure! But, be honest about the work that _you_ did
+### What I learned
+1. Function to convert a template string into a node element:
+    ```js
+    export function htmlToElement(html) {
+      const template = document.createElement('template');
+      template.innerHTML = html.trim();
+
+      return template.content.firstChild;
+    }
+    ```
+    ```js
+    //Template literals JS based component
+    export function product({image, alt, name, price}) {
+      const newPrice = formattedPrice(price)
+
+      return `
+        <li>
+          <div class="plate">
+            <img src="${`images/${image}`}" alt="${alt}" class="plate" />
+          </div>
+          <div class="content">
+            <p class="menu-item">${name}</p>
+            <p class="price">${newPrice}</p>
+            <button class="add">Add to cart</button>
+          </div>
+        </li>
+      `
+    }
+    ```
+  2. Remove node from DOM using `remove()` method:
+      ```js
+        productRemoveButton.addEventListener('click', (event) => {
+          const { product, productName } = getProductInCartInfo(event);
+          event.stopPropagation();
+          //Remove the element from the DOM
+          product.remove();
+          resetProduct(productName);
+          if (isCartEmpty()) emptyMessage.hidden = false;
+        })
+      ```
+  3. Use of web components for better handling DOM elements update without any framework:
+      ```js
+      // Define a custom element named 'product-item' extending from the HTMLElement class
+      export class ProductItem extends HTMLElement {
+        // Constructor takes an object with properties like image, alt, name, and price
+        constructor({ image, alt, name, price }) {
+          super();
+          // Initialize properties with the values passed in the constructor
+          this.image = image;
+          this.alt = alt;
+          this.name = name;
+          this.price = price;
+        }
+
+        // ConnectedCallback is called when the element is inserted into the DOM
+        connectedCallback() {
+          // Render the initial state
+          this.render();
+          // Add an event listener to the 'Add to cart' button
+          this.querySelector('button').addEventListener('click', () => {
+            // Call a private method to handle the 'Add to cart' event
+            this.#addToCartEvent();
+          });
+        }
+
+        // DisconnectedCallback is called when the element is removed from the DOM
+        disconnectedCallback() {
+          // Remove the previously added event listener to prevent memory leaks
+          this.querySelector('button').removeEventListener('click', () => {
+            this.#addToCartEvent();
+          });
+        }
+
+        // Private method to dispatch a custom event when 'Add to cart' button is clicked
+        #addToCartEvent() {
+          document.dispatchEvent(
+            ProductEvents.addToCart({
+              name: this.name,
+              price: this.price,
+              image: this.image,
+              alt: this.alt,
+              quantity: 1,
+            })
+          );
+        }
+
+        // Update method to toggle button class and update button text/content
+        update() {
+          const button = this.querySelector('button');
+          button.classList.toggle('add');
+          button.classList.toggle('in-cart');
+
+          if (button.classList.contains('in-cart')) {
+            // If the item is in the cart, show a checkmark image
+            const image = document.createElement('img');
+            image.src = 'images/check.svg';
+            image.alt = 'check';
+            button.innerText = 'In Cart';
+            button.appendChild(image);
+            return;
+          }
+
+          // If the item is not in the cart, revert to default button text
+          button.innerText = 'Add to cart';
+        }
+
+        // Render method to create the initial HTML structure of the component
+        render() {
+          this.innerHTML = `
+            <li data-name="${this.name}">
+              <div class="plate">
+                <img src="${`images/${this.image}`}" alt="${this.alt}" class="plate" />
+              </div>
+              <div class="content">
+                <p class="menu-item">${this.name}</p>
+                <p class="price">${numberToPrice(this.price)}</p>
+                <button class="add">Add to cart</button>
+              </div>
+            </li>
+          `;
+        }
+      }
+
+      // Define the custom element using window.customElements
+      window.customElements.define('product-item', ProductItem);
+      ``````
+  4. Creation of Custom Events with `detail` data and listening to them:
+      ```js
+      //Custom event definition
+      export class ProductEvents {
+        static addToCart(props) {
+          return new CustomEvent('add-to-cart', {
+            detail: { ...props }
+          })
+        }
+      }
+      ```
+      ```js
+      //Custom event listener inside web component
+      //Add custom event listener inside the 'connectedCallback'
+      connectedCallback() {
+        this.render()
+        this.querySelector('button').addEventListener('click', () => {
+          this.#addToCartEvent();
+        })
+      }
+      //Remove custom event listener inside the 'disconnectedCallback'
+      disconnectedCallback() {
+        this.querySelector('button').removeEventListener('click', () => {
+          this.#addToCartEvent();
+        })
+      }
+      //Private custom event dispatcher with 'detail' data to be sent
+      #addToCartEvent() {
+        document.dispatchEvent(ProductEvents.addToCart({
+          name: this.name,
+          price: this.price,
+          image: this.image,
+          alt: this.alt,
+          quantity: 1
+        }))
+      }
+      ``````
+
+## Author
+- Website - [Daniel González](https://odagora.com)
