@@ -22,32 +22,26 @@ export class CartItem extends HTMLElement {
     // Render the initial state
     this.render();
     // Add event listeners for remove, decrease, and increase buttons
-    this.querySelector('.remove').addEventListener('click', () => {
-      // Call a private method to handle the 'Remove from cart' event
-      this.#removeFromCartEvent();
-    });
-    this.querySelector('.decrease').addEventListener('click', () => {
-      // Call a private method to handle the 'Decrease quantity' event
-      this.#quantityChangeEvent('decrease-quantity');
-    });
-    this.querySelector('.increase').addEventListener('click', () => {
-      // Call a private method to handle the 'Increase quantity' event
-      this.#quantityChangeEvent('increase-quantity');
-    });
+    this.addEventListener('click', this.handleButtonClick)
   }
 
   // DisconnectedCallback is called when the element is removed from the DOM
   disconnectedCallback() {
     // Remove previously added event listeners to prevent memory leaks
-    this.querySelector('.remove').removeEventListener('click', () => {
+    this.removeEventListener('click', this.handleButtonClick)
+  }
+
+  handleButtonClick(event) {
+    const { target } = event;
+    const targetClassList = target.closest('button').classList;
+
+    if (targetClassList.contains('remove')) {
       this.#removeFromCartEvent();
-    });
-    this.querySelector('.decrease').removeEventListener('click', () => {
+    } else if (targetClassList.contains('decrease')) {
       this.#quantityChangeEvent('decrease-quantity');
-    });
-    this.querySelector('.increase').removeEventListener('click', () => {
+    } else if (targetClassList.contains('increase')) {
       this.#quantityChangeEvent('increase-quantity');
-    });
+    }
   }
 
   // Private method to dispatch a custom event when 'Remove from cart' button is clicked
