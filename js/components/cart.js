@@ -33,22 +33,6 @@ export class Cart {
     this.render();
   }
 
-  // Method to update the quantity and subTotal of a product in the cart
-  updateProduct(productDetails, quantity, subTotal) {
-    // Find the index of the product in the items array
-    const productIndex = this.items.findIndex(item => item.name == productDetails.name);
-    // Update quantity and subTotal for the specified product
-    this.items[productIndex].quantity = quantity;
-    this.items[productIndex].subTotal = subTotal;
-    // Render the updated cart
-    this.render();
-
-    // If quantity is 0, update the call-to-action (CTA) in the cart item
-    if (quantity === 0) {
-      this.items[productIndex].updateCTA();
-    }
-  }
-
   // Method to render the totals section of the cart
   renderTotals() {
     const totalContainer = document.querySelector('.totals');

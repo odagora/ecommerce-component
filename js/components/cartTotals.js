@@ -1,6 +1,8 @@
 import { numberToPrice } from "../utils/format.js";
 
+// Defining a custom element called cart-totals
 export class CartTotals extends HTMLElement {
+  // Constructor takes and object with subTotal, tax, and total properties
   constructor({subTotal, tax, total}) {
     super();
     this.subTotal = subTotal ?? 0;
@@ -8,10 +10,13 @@ export class CartTotals extends HTMLElement {
     this.total = total ?? 0;
   }
 
+  // ConnectedCallback is called when the element is inserted into the DOM
   connectedCallback() {
+    // Initial rendering
     this.render();
   }
 
+  // Function to update cart totals
   update() {
     const subtotal = this.querySelector('.subtotal');
     const tax = this.querySelector('.tax');
@@ -22,6 +27,7 @@ export class CartTotals extends HTMLElement {
     total.innerText = numberToPrice(this.total);
   }
 
+  // Render method to create the initial HTML structure of the component
   render() {
     this.innerHTML = `
     <div class="line-item">

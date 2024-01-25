@@ -11,6 +11,10 @@ body {
   min-width: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
 .wrapper {
   align-items: center;
   display: flex;
@@ -262,7 +266,6 @@ button.in-cart {
 }
 
 .cart-summary li .remove {
-  display: none;
   grid-area: cta;
 }
 

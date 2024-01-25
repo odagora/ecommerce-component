@@ -87,37 +87,8 @@ function removeFromCartHandler(event) {
   }
 }
 
-// Event handler for 'increase-quantity' events
-function increaseQuantityHandler(event) {
-  const productDetails = event.detail;
-  const { quantity, price } = productDetails;
-  const newQuantity = quantity + 1;
-  const subTotal = newQuantity * price;
-
-  // Update the product quantity and subtotal in the cart
-  cart.updateProduct(productDetails, newQuantity, subTotal);
-  // Update cart totals
+function quantityChangeHandler() {
   updateCartTotals();
-}
-
-// Event handler for 'decrease-quantity' events
-function decreaseQuantityHandler(event) {
-  const productDetails = event.detail;
-  const { quantity, price } = productDetails;
-
-  // If quantity is greater than 0, decrease quantity and update subtotal
-  if (quantity > 0) {
-    const newQuantity = quantity - 1;
-    const subTotal = newQuantity * price;
-
-    // Update the product quantity and subtotal in the cart
-    cart.updateProduct(productDetails, newQuantity, subTotal);
-    // Update cart totals
-    updateCartTotals();
-  }
-
-  // Return to exit the function if quantity is 0
-  return;
 }
 
 // Event listeners for various cart-related events
@@ -129,5 +100,5 @@ document.addEventListener('add-to-cart', function (event) {
   }
 });
 document.addEventListener('remove-from-cart', removeFromCartHandler);
-document.addEventListener('increase-quantity', increaseQuantityHandler);
-document.addEventListener('decrease-quantity', decreaseQuantityHandler);
+document.addEventListener('increase-quantity', quantityChangeHandler);
+document.addEventListener('decrease-quantity', quantityChangeHandler);
