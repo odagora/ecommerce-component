@@ -208,6 +208,34 @@ In this project, we're creating an eCommerce component.
           quantity: 1
         }))
       }
+      ```
+  5. Web components state management:
+      ```js
+      ...
+      constructor({ name, image, alt, quantity, price, subTotal }) {
+        super();
+        ...
+        this.quantity = quantity;
+        ...
+        this.subTotal = subTotal ?? this.price;
+        // Initial state
+        this.#state = {
+          quantity: this.quantity,
+          subTotal: this.subTotal
+        }
+      }
+
+      // Getter method to get the value of a property in the state object
+      getState(path) {
+        return this.#state[path];
+      }
+
+      // Setter method to set the value of a property in the state object
+      setState(path, value) {
+        if (this.#state[path] !== value) {
+          this.#state = { ...this.#state, [path]: value };
+        }
+      }
       ``````
 
 ## Author
