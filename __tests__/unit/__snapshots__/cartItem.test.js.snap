@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CartItem should render the correct HTML 1`] = `
+"
+      <li data-name="Test Item">
+        <div class="plate">
+          <img src="images/test.jpg" alt="Test Image" class="plate">
+          <div class="quantity">1</div>
+        </div>
+        <div class="content">
+          <p class="menu-item">Test Item</p>
+          <p class="price">$1.00</p>
+        </div>
+        <div class="quantity__wrapper">
+          <button class="decrease">
+            <img src="images/chevron.svg">
+          </button>
+          <div class="quantity">1</div>
+          <button class="increase">
+            <img src="images/chevron.svg">
+          </button>
+        </div>
+        <div class="subtotal">$1.00</div>
+        <button class="remove hidden">Remove</button>
+      </li>
+    "
+`;
