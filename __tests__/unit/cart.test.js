@@ -4,11 +4,27 @@ import { mockedMenuItems } from "../../__mocks__/menuData";
 import { CartTotals } from "../../js/components/cartTotals";
 
 describe('Cart', () => {
-  let cart;
+  let cart, cartContainer, totalsContainer;
 
   beforeEach(() => {
     cart = new Cart();
+    cartContainer = document.createElement('ul');
+    totalsContainer = document.createElement('div');
+    cartContainer.classList.add('cart-summary');
+    totalsContainer.classList.add('totals');
+    jest.spyOn(document, 'querySelector').mockImplementation((selector) => {
+      if (selector === '.cart-summary') {
+        return cartContainer;
+      }
+      if (selector === '.totals') {
+        return totalsContainer;
+      }
+    });
   })
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   test('should create a Cart instance with correct initial values', () => {
     // Assert
@@ -24,19 +40,7 @@ describe('Cart', () => {
   test('should render the entire cart, including items and totals', () => {
     // Arrange
     const cartItem = new CartItem(mockedMenuItems[0]);
-    const cartContainer = document.createElement('ul');
-    const totalsContainer = document.createElement('div');
-    cartContainer.classList.add('cart-summary');
-    totalsContainer.classList.add('totals');
     cart.items.push(cartItem);
-    jest.spyOn(document, 'querySelector').mockImplementation((selector) => {
-      if (selector === '.cart-summary') {
-        return cartContainer;
-      }
-      if (selector === '.totals') {
-        return totalsContainer;
-      }
-    });
     // Act
     cart.render();
 

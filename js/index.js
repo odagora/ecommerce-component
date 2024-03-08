@@ -3,14 +3,16 @@ import { menuItems } from "./data/data.js";
 import { Menu } from "./components/menu.js";
 import { Cart } from "./components/cart.js";
 import { priceToNumber } from "./utils/format.js";
+import { querySelectorWithError } from "./utils/dom.js";
 
 // Tax rate for cart calculations
 const taxValue = 0.0975;
 
-// Selecting DOM elements
-const menuContainer = document.querySelector('.menu');
-const cartContainer = document.querySelector('.cart-summary');
-const emptyMessage = document.querySelector('.empty');
+
+// Selecting the DOM elements
+const menuContainer = querySelectorWithError('.menu', 'Menu container not found');
+const cartContainer = querySelectorWithError('.cart-summary', 'Cart container not found');
+const emptyMessage = querySelectorWithError('.empty', 'Empty message element not found');
 
 // Creating instances of Menu and Cart
 const menu = new Menu(menuItems);

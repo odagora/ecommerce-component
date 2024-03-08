@@ -1,4 +1,5 @@
 // Importing necessary classes for cart items and totals
+import { querySelectorWithError } from "../utils/dom.js";
 import { CartItem } from "./cartItem.js";
 import { CartTotals } from "./cartTotals.js";
 
@@ -36,8 +37,13 @@ export class Cart {
   // Method to render the totals section of the cart
   renderTotals() {
     const totalContainer = document.querySelector('.totals');
-    // Append the totalElement to the totals container
-    totalContainer.appendChild(this.totalElement);
+    // Check if the total container exists
+    if (totalContainer) {
+      // Append the totalElement to the totals container
+      totalContainer.appendChild(this.totalElement);
+    } else {
+      throw new Error('Total container not found');
+    }
   }
 
   // Method to update the totals section with new values
@@ -53,13 +59,19 @@ export class Cart {
   // Method to check if the cart is empty
   isEmpty() {
     const cartItems = document.querySelectorAll('.cart-summary li');
-    return !cartItems.length;
+    // Check if the cart items exist
+    if (cartItems) {
+      // Return true if the cart is empty
+      return !cartItems.length;
+    } else {
+      throw new Error('Cart items not found');
+    }
   }
 
   // Method to render the entire cart, including items and totals
   render() {
-    const cartContainer = document.querySelector('.cart-summary');
-    const totalContainer = document.querySelector('.totals');
+    const cartContainer = querySelectorWithError('.cart-summary', 'Cart container not found');
+    const totalContainer = querySelectorWithError('.totals', 'Total container not found');
     // Clear the existing content in the cart and totals containers
     cartContainer.innerHTML = '';
     totalContainer.innerHTML = '';

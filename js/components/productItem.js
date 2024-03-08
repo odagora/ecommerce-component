@@ -11,6 +11,7 @@ export class ProductItem extends HTMLElement {
     this.alt = alt;
     this.name = name;
     this.price = price;
+    this.buttonClickHandler = this.#addToCartEvent.bind(this);
   }
 
   // ConnectedCallback is called when the element is inserted into the DOM
@@ -18,18 +19,13 @@ export class ProductItem extends HTMLElement {
     // Render the initial state
     this.render();
     // Add an event listener to the 'Add to cart' button
-    this.querySelector('button').addEventListener('click', () => {
-      // Call a private method to handle the 'Add to cart' event
-      this.#addToCartEvent();
-    });
+    this.querySelector('button').addEventListener('click', this.buttonClickHandler);
   }
 
   // DisconnectedCallback is called when the element is removed from the DOM
   disconnectedCallback() {
     // Remove the previously added event listener to prevent memory leaks
-    this.querySelector('button').removeEventListener('click', () => {
-      this.#addToCartEvent();
-    });
+    this.querySelector('button').removeEventListener('click', this.buttonClickHandler);
   }
 
   // Private method to dispatch a custom event when 'Add to cart' button is clicked
@@ -83,4 +79,7 @@ export class ProductItem extends HTMLElement {
 }
 
 // Define the custom element using window.customElements
-window.customElements.define('product-item', ProductItem);
+// To prevent `NotSupportedError` due to redefining a custom element, we check if the element is not already defined before defining it.
+if (!customElements.get('product-item')) {
+  customElements.define('product-item', ProductItem);
+}

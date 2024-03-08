@@ -46,4 +46,7 @@ export class CartTotals extends HTMLElement {
   }
 }
 
-window.customElements.define('cart-totals', CartTotals);
+if (!customElements.get('cart-totals')) {
+  customElements.define('cart-totals', CartTotals);
+}
+

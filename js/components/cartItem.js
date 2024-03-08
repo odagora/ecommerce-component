@@ -139,4 +139,6 @@ export class CartItem extends HTMLElement {
 }
 
 // Define the custom element using window.customElements
-window.customElements.define('cart-item', CartItem);
+if (!customElements.get('cart-item')) {
+  customElements.define('cart-item', CartItem);
+}

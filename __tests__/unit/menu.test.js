@@ -2,6 +2,10 @@ import { Menu } from "../../js/components/menu";
 import { mockedMenuItems } from "../../__mocks__/menuData";
 
 describe('Menu', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('should instantiate Menu with an array of products', () => {
     // Act
     const menu = new Menu(mockedMenuItems);
