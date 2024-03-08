@@ -13,3 +13,7 @@ docker-compose.yml
 
 # Test
 coverage
+
+# Cypress test artifacts
+cypress/videos
+cypress/screenshots
