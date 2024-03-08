@@ -30,23 +30,7 @@ describe("ProductItem", () => {
 
   test('should render the correct HTML', () => {
     // Arrange
-    // Mock the numberToPrice function
-    const mockNumberToPrice = jest.fn();
-    mockNumberToPrice.mockReturnValue('$10.00');
-
-    // Assert
-    expect(productItem.innerHTML).toBe(`
-      <li data-name="Product Name">
-        <div class="plate">
-          <img src="images/image.jpg" alt="alt text" class="plate">
-        </div>
-        <div class="content">
-          <p class="menu-item">Product Name</p>
-          <p class="price">$10.00</p>
-          <button class="add">Add to cart</button>
-        </div>
-      </li>
-    `);
+    expect(productItem.innerHTML).toMatchSnapshot();
   })
 
   test('Should dispatch a custom event with correct details when \'Add To Cart\' button is clicked', () => {

@@ -111,4 +111,21 @@ describe('CartItem', () => {
       }
     }));
   })
+
+  test('should show button when quantity is greater than zero', () => {
+    // Arrange
+    const removeButton = cartItem.querySelector('.remove');
+
+    // Assert
+    expect(removeButton.classList).toContain('hidden')
+  })
+
+  test('should hide remove button when quantity is equal to zero', () => {
+    // Arrange & Act
+    const decreaseButton = cartItem.querySelector('.decrease');
+    decreaseButton.click();
+
+    // Assert
+    expect(cartItem.querySelector('.remove').classList).not.toContain('hidden');
+  })
 })

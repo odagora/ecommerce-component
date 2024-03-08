@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProductItem should render the correct HTML 1`] = `
+"
+      <li data-name="Product Name">
+        <div class="plate">
+          <img src="images/image.jpg" alt="alt text" class="plate">
+        </div>
+        <div class="content">
+          <p class="menu-item">Product Name</p>
+          <p class="price">$10.00</p>
+          <button class="add">Add to cart</button>
+        </div>
+      </li>
+    "
+`;
