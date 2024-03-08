@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CartTotals should render the correct HTML 1`] = `
+"
+    <div class="line-item">
+      <div class="label">Subtotal:</div>
+      <div class="amount price subtotal">$0.10</div>
+    </div>
+    <div class="line-item">
+      <div class="label">Tax:</div>
+      <div class="amount price tax">$0.01</div>
+    </div>
+    <div class="line-item total">
+      <div class="label">Total:</div>
+      <div class="amount price total">$0.11</div>
+    </div>
+    "
+`;
