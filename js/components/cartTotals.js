@@ -32,15 +32,15 @@ export class CartTotals extends HTMLElement {
     this.innerHTML = `
     <div class="line-item">
       <div class="label">Subtotal:</div>
-      <div class="amount price subtotal">${numberToPrice(this.subTotal)}</div>
+      <div class="amount price subtotal" data-testid="subtotal">${numberToPrice(this.subTotal)}</div>
     </div>
     <div class="line-item">
       <div class="label">Tax:</div>
-      <div class="amount price tax">${numberToPrice(this.tax)}</div>
+      <div class="amount price tax" data-testid="tax">${numberToPrice(this.tax)}</div>
     </div>
     <div class="line-item total">
       <div class="label">Total:</div>
-      <div class="amount price total">${numberToPrice(this.total)}</div>
+      <div class="amount price total" data-testid="total">${numberToPrice(this.total)}</div>
     </div>
     `
   }

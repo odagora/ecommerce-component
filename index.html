@@ -12,17 +12,19 @@
       <div class="panel">
         <h1>To Go Menu</h1>
         <!-- Content to be filled dynamically-->
-        <ul class="menu"></ul>
+        <ul class="menu" data-testid="menu"></ul>
       </div>
-      <div class="panel cart">
+      <div class="panel cart" data-testid="cart">
         <h1>Your Cart</h1>
-        <p class="empty">Your cart is empty.</p>
+        <p class="empty" data-testid="empty-cart-message">
+          Your cart is empty.
+        </p>
 
         <!-- Content to be filled dynamically-->
-        <ul class="cart-summary"></ul>
+        <ul class="cart-summary" data-testid="cart-summary"></ul>
 
         <!-- Content to be filled dynamically-->
-        <div class="totals"></div>
+        <div class="totals" data-testid="totals"></div>
       </div>
     </div>
     <script src="./js/index.js" type="module"></script>
