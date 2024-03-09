@@ -1,4 +1,4 @@
-import { CartItem } from "../../js/components/cartItem";
+import { CartItem } from "../js/components/cartItem";
 
 describe('CartItem', () => {
   let cartItem, name, image, alt, quantity, price;

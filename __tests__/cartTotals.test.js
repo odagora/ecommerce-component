@@ -1,4 +1,4 @@
-import { CartTotals } from "../../js/components/cartTotals";
+import { CartTotals } from "../js/components/cartTotals";
 
 describe("CartTotals", () => {
   let cartTotals, subTotal, tax, total;

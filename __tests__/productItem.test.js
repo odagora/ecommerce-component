@@ -1,4 +1,4 @@
-import { ProductItem } from "../../js/components/productItem";
+import { ProductItem } from "../js/components/productItem";
 
 describe("ProductItem", () => {
   let productItem, image, alt, name, price;

@@ -1,7 +1,7 @@
-import { Cart } from "../../js/components/cart";
-import { CartItem } from "../../js/components/cartItem";
-import { mockedMenuItems } from "../../__mocks__/menuData";
-import { CartTotals } from "../../js/components/cartTotals";
+import { Cart } from "../js/components/cart";
+import { CartItem } from "../js/components/cartItem";
+import { mockedMenuItems } from "../__mocks__/menuData";
+import { CartTotals } from "../js/components/cartTotals";
 
 describe('Cart', () => {
   let cart, cartContainer, totalsContainer;
