@@ -12,7 +12,6 @@ const taxValue = 0.0975;
 // Selecting the DOM elements
 const menuContainer = querySelectorWithError('.menu', 'Menu container not found');
 const cartContainer = querySelectorWithError('.cart-summary', 'Cart container not found');
-const emptyMessage = querySelectorWithError('.empty', 'Empty message element not found');
 
 // Creating instances of Menu and Cart
 const menu = new Menu(menuItems);
@@ -55,17 +54,13 @@ function addToCartHandler(event) {
   const productSelector = menuContainer.querySelector(`[data-name="${productDetails.name}"]`);
   // Adding the product to the cart
   cart.addProduct(productDetails);
+  // Update cart totals
+  updateCartTotals();
 
   // If the product is in the menu, update its display
   if (productSelector) {
     const productItem = productSelector.closest('product-item');
     productItem.update();
-  }
-
-  // If the cart is not empty, hide the empty message and update cart totals
-  if (!cart.isEmpty()) {
-    emptyMessage.hidden = true;
-    updateCartTotals();
   }
 }
 
@@ -76,16 +71,13 @@ function removeFromCartHandler(event) {
   const productSelector = menuContainer.querySelector(`[data-name="${productDetails.name}"]`);
   // Removing the product from the cart
   cart.removeProduct(productDetails);
+  // Update cart totals
+  updateCartTotals();
 
   // If the product is in the menu, update its display
   if (productSelector) {
     const productItem = productSelector.closest('product-item');
     productItem.update();
-  }
-
-  // If the cart is empty, show the empty message
-  if (cart.isEmpty()) {
-    emptyMessage.hidden = false;
   }
 }
 

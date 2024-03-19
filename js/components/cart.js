@@ -1,5 +1,6 @@
 // Importing necessary classes for cart items and totals
 import { querySelectorWithError } from "../utils/dom.js";
+import { getItemsFromLocalStorage, setItemsToLocalStorage } from "../utils/localStorage.js";
 import { CartItem } from "./cartItem.js";
 import { CartTotals } from "./cartTotals.js";
 
@@ -7,12 +8,20 @@ import { CartTotals } from "./cartTotals.js";
 export class Cart {
   // Constructor initializes properties for items, subTotal, tax, total, and totalElement
   constructor() {
-    this.items = [];
     this.subTotal = 0;
     this.tax = 0;
     this.total = 0;
+    this.items = this.setProducts(getItemsFromLocalStorage('cartItems'));
     // Create an instance of CartTotals with initial values and assign it to totalElement
     this.totalElement = new CartTotals(this.subTotal, this.tax, this.total);
+  }
+
+  setProducts(products) {
+    if (!products || products.length === 0) {
+      return [];
+    }
+
+    return products.map(product => new CartItem({ ...product }));
   }
 
   // Method to add a product to the cart
@@ -23,6 +32,8 @@ export class Cart {
     this.items.push(cartItem);
     // Render the updated cart
     this.render();
+    // Save updated items array to localStorage
+    setItemsToLocalStorage('cartItems', this.items);
   }
 
   // Method to remove a product from the cart
@@ -32,6 +43,8 @@ export class Cart {
     this.items = newItems;
     // Render the updated cart
     this.render();
+    // Update items array in localStorage after removing item
+    setItemsToLocalStorage('cartItems', this.items);
   }
 
   // Method to render the totals section of the cart
@@ -72,6 +85,7 @@ export class Cart {
   render() {
     const cartContainer = querySelectorWithError('.cart-summary', 'Cart container not found');
     const totalContainer = querySelectorWithError('.totals', 'Total container not found');
+    const emptyMessage = querySelectorWithError('.empty', 'Empty message element not found');
     // Clear the existing content in the cart and totals containers
     cartContainer.innerHTML = '';
     totalContainer.innerHTML = '';
@@ -79,6 +93,8 @@ export class Cart {
     this.items.forEach(item => {
       cartContainer.appendChild(item);
     });
+    // Check if the cart is empty and toggle the hidden class accordingly on the empty message element
+    emptyMessage.classList.toggle('hidden', !this.isEmpty());
     // Render the totals section
     this.renderTotals();
   }
