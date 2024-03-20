@@ -2,22 +2,33 @@ import { Cart } from "../js/components/cart";
 import { CartItem } from "../js/components/cartItem";
 import { mockedMenuItems } from "../__mocks__/menuData";
 import { CartTotals } from "../js/components/cartTotals";
+import { mockWindowProperty } from "../__mocks__/mockWindowProperty";
 
 describe('Cart', () => {
-  let cart, cartContainer, totalsContainer;
+  let cart, cartContainer, totalsContainer, emptyMessage;
+  mockWindowProperty('localStorage', {
+    setItem: jest.fn(),
+    getItem: jest.fn(),
+    removeItem: jest.fn()
+  });
 
   beforeEach(() => {
     cart = new Cart();
     cartContainer = document.createElement('ul');
     totalsContainer = document.createElement('div');
+    emptyMessage = document.createElement('p');
     cartContainer.classList.add('cart-summary');
     totalsContainer.classList.add('totals');
+    emptyMessage.classList.add('empty');
     jest.spyOn(document, 'querySelector').mockImplementation((selector) => {
       if (selector === '.cart-summary') {
         return cartContainer;
       }
       if (selector === '.totals') {
         return totalsContainer;
+      }
+      if (selector === '.empty') {
+        return emptyMessage;
       }
     });
   })
@@ -64,6 +75,7 @@ describe('Cart', () => {
     expect(cartItem.alt).toBe(mockedMenuItems[0].alt);
     expect(cartItem.subTotal).toBe(mockedMenuItems[0].price);
     expect(cartItem.isRemoveCTAHidden).toBe(true);
+    expect(localStorage.setItem).toHaveBeenCalledWith('cartItems', JSON.stringify(cart.items));
   })
 
   test('should remove a product from the cart and leave it empty', () => {
@@ -74,6 +86,7 @@ describe('Cart', () => {
     // Assert
     expect(cart.items).toEqual([]);
     expect(cart.isEmpty()).toBe(true);
+    expect(localStorage.setItem).toHaveBeenCalledWith('cartItems', JSON.stringify(cart.items));
   })
 
   test('should update the totals section with correct values', () => {
