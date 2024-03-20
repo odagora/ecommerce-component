@@ -1,5 +1,5 @@
 // Importing the ProductItem class for rendering individual product items
-import { getItemsFromLocalStorage } from "../utils/localStorage.js";
+import { getItemFromLocalStorage } from "../utils/localStorage.js";
 import { ProductItem } from "./productItem.js";
 
 // Define a class named 'Menu'
@@ -27,7 +27,7 @@ export class Menu {
   // Method to render the menu by creating and appending ProductItem instances
   render() {
     // Get the existing products in cart
-    const productsInCart = getItemsFromLocalStorage('cartItems')
+    const productsInCart = getItemFromLocalStorage('cartItems')
     // Select the menu container element
     const menuContainer = document.querySelector('.menu');
 

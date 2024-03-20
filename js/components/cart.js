@@ -1,6 +1,6 @@
 // Importing necessary classes for cart items and totals
-import { querySelectorWithError } from "../utils/dom.js";
-import { getItemsFromLocalStorage, setItemsToLocalStorage } from "../utils/localStorage.js";
+import { querySelectorAllWithError, querySelectorWithError } from "../utils/dom.js";
+import { getItemFromLocalStorage, setItemToLocalStorage } from "../utils/localStorage.js";
 import { CartItem } from "./cartItem.js";
 import { CartTotals } from "./cartTotals.js";
 
@@ -11,7 +11,7 @@ export class Cart {
     this.subTotal = 0;
     this.tax = 0;
     this.total = 0;
-    this.items = this.setProducts(getItemsFromLocalStorage('cartItems'));
+    this.items = this.setProducts(getItemFromLocalStorage('cartItems'));
     // Create an instance of CartTotals with initial values and assign it to totalElement
     this.totalElement = new CartTotals(this.subTotal, this.tax, this.total);
   }
@@ -33,7 +33,7 @@ export class Cart {
     // Render the updated cart
     this.render();
     // Save updated items array to localStorage
-    setItemsToLocalStorage('cartItems', this.items);
+    setItemToLocalStorage('cartItems', this.items);
   }
 
   // Method to remove a product from the cart
@@ -44,7 +44,7 @@ export class Cart {
     // Render the updated cart
     this.render();
     // Update items array in localStorage after removing item
-    setItemsToLocalStorage('cartItems', this.items);
+    setItemToLocalStorage('cartItems', this.items);
   }
 
   // Method to render the totals section of the cart
@@ -71,14 +71,9 @@ export class Cart {
 
   // Method to check if the cart is empty
   isEmpty() {
-    const cartItems = document.querySelectorAll('.cart-summary li');
-    // Check if the cart items exist
-    if (cartItems) {
-      // Return true if the cart is empty
-      return !cartItems.length;
-    } else {
-      throw new Error('Cart items not found');
-    }
+    const cartItems = querySelectorAllWithError('.cart-summary li','Cart items not found' );
+    // Return true if the cart is empty
+    return !cartItems.length;
   }
 
   // Method to render the entire cart, including items and totals

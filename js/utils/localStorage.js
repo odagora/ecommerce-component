@@ -1,4 +1,4 @@
-export function setItemsToLocalStorage(key, values) {
+export function setItemToLocalStorage(key, values) {
   try {
     localStorage.setItem(key, JSON.stringify(values));
   } catch (error) {
@@ -6,7 +6,7 @@ export function setItemsToLocalStorage(key, values) {
   }
 }
 
-export function getItemsFromLocalStorage(key) {
+export function getItemFromLocalStorage(key) {
   try {
     const localStorageItems = localStorage.getItem(key)
     if(localStorageItems) {
@@ -16,5 +16,13 @@ export function getItemsFromLocalStorage(key) {
     }
   } catch (error) {
     console.error('Error retrieving items from localStorage', error);
+  }
+}
+
+export function removeItemFromLocalStorage(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.error('Error removing items from localStorage', error);
   }
 }
