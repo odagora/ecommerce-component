@@ -45,6 +45,8 @@ In this project, we're creating an eCommerce component.
 - OOP
 - Web components
 - Custom events
+- Unit testing with Jest
+- Integration testing with Cypress
 
 ### What I learned
 1. Function to convert a template string into a node element:
@@ -237,6 +239,100 @@ In this project, we're creating an eCommerce component.
         }
       }
       ``````
+  6. Unit testing using Jest with the AAA framework:
+      ```js
+      describe('CartItem', () => {
+        let cartItem, name, image, alt, quantity, price;
 
+        beforeEach(() => {
+          // Arrange
+          name = 'Test Item';
+          image = 'test.jpg';
+          alt = 'Test Image';
+          quantity = 1;
+          price = 100;
+
+          // Act
+          cartItem = new CartItem({ name, image, alt, quantity, price });
+          document.body.appendChild(cartItem);
+        });
+
+        afterEach(() => {
+          jest.resetAllMocks();
+          document.body.removeChild(cartItem);
+        })
+
+        test('should create CartItem element with correct properties', () => {
+          // Assert
+          expect(cartItem.name).toBe(name);
+          expect(cartItem.image).toBe(image);
+          expect(cartItem.alt).toBe(alt);
+          expect(cartItem.quantity).toBe(quantity);
+          expect(cartItem.price).toBe(price);
+        })
+
+        test('should render the correct HTML', () => {
+          // Assert
+          // Use of snapshot testing to avoid specifying the expected UI structure. See 'https://jestjs.io/docs/snapshot-testing'
+          expect(cartItem.innerHTML).toMatchSnapshot();
+        })
+      })
+      ```
+  7. Integration testing using Cypress:
+      ```js
+      describe('Initial state', () => {
+        it('should display the menu items and an empty cart message', () => {
+          cy.visit('/')
+            .get('[data-testid="menu"]').should('exist')
+            .get('[data-testid="empty-cart-message"]').should('exist')
+            .get('[data-testid="empty-cart-message"]').should('contain', 'Your cart is empty.')
+        })
+      })
+      ```
+  8. `localStorage` mocking for unit testing:
+      * `mockWindowProperty` mock function:
+        ```js
+        /**
+         * Function that mocks a property on the 'window' object with a specified value.
+        * Sets up the mock before each test suite and restores
+        * the original property after each test suite.
+        * @example
+        * mockWindowProperty('innerWidth', 500);
+        * @param {string} property The name of the property to mock on 'window' object.
+        * @param {*} value The value to set on mocked property.
+        */
+        export const mockWindowProperty = (property, value) => {
+          const originalProperty = window[property];
+          delete window[property];
+          beforeAll(() => {
+            if (originalProperty !== undefined) {
+              Object.defineProperty(window, property, {
+                configurable: true,
+                writable: true,
+                value,
+              });
+            } else {
+              window[property] = value;
+            }
+          });
+          afterAll(() => {
+            if (originalProperty !== undefined) {
+              window[property] = originalProperty;
+            } else {
+              delete window[property];
+            }
+          });
+        };
+        ```
+      * Usage of the `mockWindowProperty` within a test suite:
+        ```js
+        mockWindowProperty('localStorage', {
+          setItem: jest.fn(),
+          getItem: jest.fn(),
+          removeItem: jest.fn()
+        });
+        ```
+  9. Getting unit testing coverage running `jest --coverage`:
+      ![Unit testing coverage report](https://res.cloudinary.com/dyv1jgadp/image/upload/v1711060820/2024-03-21_17-38-27_zizkxz.jpg)
 ## Author
 - Website - [Daniel González](https://odagora.com)
