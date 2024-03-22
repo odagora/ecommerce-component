@@ -1,4 +1,7 @@
 # AdventofJS - Ecommerce component
+![test-deploy workflow](https://github.com/odagora/ecommerce-component/actions/workflows/test-deploy.yml/badge.svg)
+[![Ecommerce component](https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/detailed/ukyvks&style=flat&logo=cypress)](https://cloud.cypress.io/projects/ukyvks/runs)
+
 This is a solution to the Avent of JS ecommerce component challenge.
 
 
