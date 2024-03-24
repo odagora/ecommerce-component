@@ -338,5 +338,17 @@ In this project, we're creating an eCommerce component.
         ```
   9. Getting unit testing coverage running `jest --coverage`:
       ![Unit testing coverage report](https://res.cloudinary.com/dyv1jgadp/image/upload/v1711060820/2024-03-21_17-38-27_zizkxz.jpg)
+  10. GitHub actions CI/CD integration with Github Pages:
+      - Running Jest testing coverage.
+      - Running Cypress testing.
+      - Creating testing results badges in README.
+      - Creating Jest coverage badge in README with [shields.io](https://shields.io/).
+      - Creating Cypress badge in README with [shields.io](https://shields.io/) and [cypress cloud](https://cloud.cypress.io/).
+
+## Useful links
+- Coverage badges `dev.to` article: [click here](https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa).
+- Dynamic badges GitHub action by Simon Schneegans: [click here](https://github.com/Schneegans/dynamic-badges-action).
+- Coverage badges personal gist: [click here](https://gist.github.com/odagora/be25252968fdd94ac6a731aec01b50dd).
+- Jest coverage comment by Misha Kav: [click here](https://github.com/MishaKav/jest-coverage-comment).
 ## Author
 - Website - [Daniel González](https://odagora.com)
