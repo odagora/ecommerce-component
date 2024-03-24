@@ -3,5 +3,6 @@ module.exports = {
   testPathIgnorePatterns: [
     "/node_modules/",
   ],
-  testEnvironment: "jsdom"
+  testEnvironment: "jsdom",
+  coverageReporters: ["json-summary"]
 };
